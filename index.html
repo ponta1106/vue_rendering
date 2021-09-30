@@ -4,19 +4,138 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background-color: black;
+    }
+    .container {
+      width: 90%;
+      margin: 0 auto;
+    }
+    h3 {
+      background-color: #dbafa0;
+      padding: 10px;
+    }
+    button {
+      background-color: #dbafa0;
+      padding: 10px;
+      border: none;
+      box-shadow: 5px 5px;
+    }
+    input {
+      padding: 10px;
+      border: none;
+    }
+  </style>
   <title>vue_rendering</title>
 </head>
 <body>
-  <div id="app">
-    <p>{{ message }}</p>
-  </div>
-
+  body
   <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+  
+  <div id="app" :style="[baseStyles]">
+    #app
+    <div class="container">
+
+
+      <h3>v-if</h3>
+      <!-- v-elseとv-else-ifはv-if構文の直後でないとダメ -->
+      <!-- 頻繁に表示非表示を切り替える際に重くなる -->
+      <p v-if="ok">OK</p>
+      <p v-else-if="maybeOk">maybe OK!</p>
+      <p v-else>Not OK...</p>
+      
+      
+      <h3>template</h3>
+      <!-- templateタグはhtmlに描画されない -->
+      <button @click="ok = !ok">ボタン</button>
+      <template v-if="ok">
+        <p>Hello</p>
+        <p>Good Bye</p>
+        <p>おはよう</p>
+      </template>
+      
+      
+      <h3>v-show</h3>
+      <!-- v-showは初期描画される(cssのdisplay:none;で隠してる状態) -->
+      <!-- templateタグとv-showは一緒に使えない -->
+      <!-- 頻繁に表示非表示を切り替える際に有効 -->
+      <button @click="ok = !ok">ボタン</button>
+      <p v-if="ok">If</p>
+      <p v-show="ok">Show</p>
+
+
+      <h3>v-for</h3>
+      <!-- 配列に基づいてリスト表示する -->
+      <!-- 配列のインデックス番号と内容を表示 -->
+      <ul>
+        <li v-for="(fruit, index) in fruits">({{ index }}) {{ fruit }}</li>
+      </ul>
+      
+      <h3>オブジェクトの内容を表示</h3>
+      <ul>
+        <li v-for="value in object">{{ value }}</li>
+      </ul>
+      
+      <h3>オブジェクトのインデックスを表示</h3>
+      <ul>
+        <li v-for="(value, key, index) in object">({{ index }}) {{ key }} - {{ value }}</li>
+      </ul>
+      
+      <h3>templateでv-forを使う</h3>
+      <ul>
+        <template v-for="(fruit in fruits">
+          <li>{{ fruit }}</li>
+          <hr>
+        </template>
+      </ul>
+
+      <h3>n in 10のように整数値に対してv-forを適用する</h3>
+      <ul>
+        <li v-for="n in 10">{{ n }}</li>
+      </ul>
+      
+      <h3>in の代わりに of を使える</h3>
+      <ul>
+        <li v-for="n of 10">{{ n }}</li>
+      </ul>
+
+      <h3>key属性をつける必要性</h3>
+      <ul>
+        <!-- divの内容に関連性を持たせる為に:key="fruit"を追記 -->
+        <div v-for="fruit in fruits" :key="fruit">
+          <p>{{ fruit }}</p>
+          <input type="text">
+        </div>
+      </ul>
+      <button @click="remove">先頭を削除</button>
+    </div>
+  </div>
+  
   <script>
     new Vue({
       el: '#app',
       data: {
-        message: 'rendering',
+        baseStyles: {
+          'font-family': 'Verdana',
+          'color': '#333',
+          'background-color': '#9fb2b8',
+          'min-height': '100vh',
+          'padding': '10px',
+        },
+        ok: false,
+        maybeOk: true,
+        fruits: ['りんご', 'バナナ', 'ぶどう'],
+        object: {
+          firstName: '太郎',
+          lastName: '田中',
+          age: 21,
+        }
+      },
+      methods: {
+        remove: function() {
+          this.fruits.shift()
+        }
       }
     })
   </script>
